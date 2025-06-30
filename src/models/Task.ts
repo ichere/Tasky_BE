@@ -1,10 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 
-const taskSchema = new mongoose.Schema({
+export interface ITask extends Document {
+  name: string;
+  description: string;
+  budget: number;
+  claimedBy: Types.ObjectId | null;
+}
+
+const TaskSchema = new Schema<ITask>({
   name: { type: String, required: true },
-  description: String,
-  budget: Number,
-  claimedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+  description: { type: String, required: true },
+  budget: { type: Number, required: true },
+  claimedBy: { type: Schema.Types.ObjectId, ref: "User", default: null } // ✅ Allow null
 });
 
-export default mongoose.model("Task", taskSchema);
+export default mongoose.model<ITask>("Task", TaskSchema);
